@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countdown Page</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #mainText {
+            opacity: 0;
+            animation: fadeIn 2s forwards;
+            text-align: center;
+            font-size: 2em;
+        }
+
+        #countdown {
+            font-size: 1.5em;
+            margin-top: 20px;
+            display: none;
+        }
+
+        #inputCode {
+            display: none;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        #codeInput {
+            text-align: center;
+            color: green;
+        }
+
+        #result, #feedback {
+            font-size: 1.5em;
+            margin-top: 10px;
+            display: none;
+            color: yellow;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        @keyframes moveUp {
+            to { transform: translateY(-50px); opacity: 0; }
+        }
+
+        .hiddenText {
+            position: absolute;
+            top: -9999px;
+            left: -9999px;
+            color: black;
+            font-size: 0.1px;
+        }
+    </style>
+</head>
+<body>
+    <div id="mainText">THE END</div>
+    <div id="countdown"></div>
+    <div id="inputCode">
+        <input type="text" id="codeInput" placeholder="Enter code...">
+        <button onclick="checkCode()">Submit</button>
+        <div id="feedback"></div>
+    </div>
+
+    <div id="result"></div>
+
+    <div id="hiddenText" class="hiddenText">
+        <!-- Fake text to confuse those who inspect the element -->
+        <!-- This text will appear in the background -->
+        <div id="fakeTextContainer"></div>
+    </div>
+
+    <script>
+        const mainText = document.getElementById('mainText');
+        const countdown = document.getElementById('countdown');
+        const inputCode = document.getElementById('inputCode');
+        const result = document.getElementById('result');
+        const feedback = document.getElementById('feedback');
+        const codeInput = document.getElementById('codeInput');
+        const fakeTextContainer = document.getElementById('fakeTextContainer');
+
+        let countdownDate = new Date("September 7, 2024 00:00:00").getTime();
+
+        setTimeout(() => {
+            mainText.style.animation = "moveUp 2s forwards";
+            setTimeout(() => {
+                countdown.style.display = 'block';
+                startCountdown();
+                inputCode.style.display = 'block';
+            }, 2000);
+        }, 2000);
+
+        function startCountdown() {
+            let x = setInterval(() => {
+                let now = new Date().getTime();
+                let distance = countdownDate - now;
+
+                let days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                countdown.innerHTML = days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+
+                if (distance < 0) {
+                    clearInterval(x);
+                    countdown.innerHTML = "EXPIRED";
+                }
+            }, 1000);
+        }
+
+        function checkCode() {
+            const realCode = "torne sundays soup";
+            const responses = {
+                "Aasher is dumb": "Look at the mirror you are dumb",
+                "Yusuf is a nerd": "Ye but he can help you in obviously",
+                "jafri": "A smarty pants with technology",
+                "Assher": "Your not funny",
+                "introvert": "He has more problems than what you see him outside",
+                "shy": "He has more problems than what you see him outside",
+                "quite kid": "He has more problems than what you see him outside",
+                "cry baby": "He has more problems than what you see him outside",
+                "Abhishek hizren": "Who?",
+                "srysylan": "Ghoster",
+                "Were am I": "Nowhere",
+                "I give up": "R.I.P you never helped",
+                "Secrets": "Aasher has an art book and he has four different pages of drawing if torn and combined you will see- Oh no it's Aasher",
+                "diary": "Well lame",
+                "Cipher": "We had a beautifully adopted boy\nHe thinks he can \nHELP us but he failed\nHELP HELEP HELP ME\nBut he fa i l e d I will **** kshdjlsjsksk\nSjsjskslhdmd\nSidds\nSjdms\nSljdnd\nDkdururoksmdhf\nDkdjdbfhdkdkbdidbddijd\n\nDjdjdjjd",
+                "forest": () => { window.location.href = "https://youtu.be/3TNK916Pjto?si=lnDf1ho3dJJkL8GD"; }
+            };
+
+            const inputValue = codeInput.value.trim();
+
+            if (inputValue === realCode) {
+                mainText.style.display = 'none';
+                countdown.style.display = 'none';
+                inputCode.style.display = 'none';
+                result.innerHTML = "THE ANSWER IS IN THE STAGE MIDDLE";
+                result.style.display = 'block';
+                feedback.classList.remove('wrong');
+                feedback.classList.add('correct');
+                feedback.innerHTML = "Award of nerd goes to You<br>Aura 10000+";
+                feedback.style.display = 'block';
+            } else if (responses[inputValue]) {
+                if (typeof responses[inputValue] === 'function') {
+                    responses[inputValue]();
+                } else {
+                    feedback.innerHTML = responses[inputValue];
+                    feedback.style.display = 'block';
+                }
+            } else {
+                feedback.innerHTML = "Unknown Code";
+                feedback.style.display = 'block';
+            }
+        }
+
+        // Add fake text continuously to the hidden container
+        function addFakeText() {
+            const fakeText = `LOREMipsumDOLORsitAMETconsecteturADIPISCINGelitNULLAmalesuadaFAMESACturpisEGESTASUTtempusQUAMfelisCOMMODOimperdietQUISaliquamEXVELitGRAINliberoUTDUIACduisVENENATISvehiculaTORTORRISUSvenenatisTRISTIQUEaliquetDIAMnecINTERDUMFUSCEsed. `;
+            fakeTextContainer.innerHTML += fakeText;
+            setTimeout(addFakeText, 100); // Adjust the speed of replication
+        }
+
+        addFakeText(); // Start adding fake text
+    </script>
+</body>
+</html>
